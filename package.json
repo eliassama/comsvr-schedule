@@ -6,20 +6,26 @@
   "types": "index.d.ts",
   "scripts": {
     "test": "jest --config jestconfig.json",
-    "build": "tsc",
-    "format": "prettier --write src/**.ts",
+    "format": "prettier --write src/",
     "lint": "eslint src/",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run test && npm run lint",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "prebuild": "npm run format && npm run lint && git add -A src && rm -rf lib",
+    "build": "tsc",
+    "preversion": "npm run build",
+    "patch": "npm version patch",
+    "minor": "npm version minor",
+    "major": "npm version major",
+    "postversion": "git push && git push --tags",
+    "prepublishOnly": "npm run build",
+    "version": "npm run format && git add -A src"
   },
+  "pre-commit": [
+    "build"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eliassama/comsvr-schedule.git"
   },
-  "author": "elias <elias@elias.ink> (https://github.com/eliassama)",
+  "author": "eliassama <elias@elias.ink> (https://github.com/eliassama)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/eliassama/comsvr-schedule/issues"
@@ -30,14 +36,19 @@
     "@typescript-eslint/eslint-plugin": "5.5.0",
     "@typescript-eslint/parser": "5.5.0",
     "eslint": "8.4.1",
-    "eslint-config-eliassama": "1.2.0",
+    "eslint-config-eliassama": "1.3.2",
     "eslint-plugin-jest": "25.3.0",
     "jest": "27.4.3",
+    "pre-commit": "1.2.2",
     "prettier": "2.5.1",
     "ts-jest": "27.1.1",
     "typescript": "4.5.2"
   },
   "files": [
     "lib/*"
-  ]
+  ],
+  "dependencies": {
+    "chalk": "4.1.2",
+    "comsvr-ast": "2.1.1"
+  }
 }
